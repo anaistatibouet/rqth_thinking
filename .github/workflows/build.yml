@@ -4,7 +4,9 @@ on:
   push:
     tags:
     - '*'
-    
+    branches:
+      - main
+
 name: Build project
 jobs:
   build:
@@ -15,7 +17,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
-
       - name: Cache node modules
         uses: actions/cache@v1
         with:
