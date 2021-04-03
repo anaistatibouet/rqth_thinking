@@ -4,7 +4,8 @@ on:
   push:
     tags:
     - '*'
-name: Build Project CI
+    
+name: Build project
 jobs:
   build:
     runs-on: ubuntu-latest
