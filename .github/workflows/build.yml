@@ -1,9 +1,10 @@
-name: build project
-on:
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+on: 
   push:
-    branches:
-      - main
-
+    tags:
+    - '*'
+name: Build Project CI
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,13 +22,17 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-
       - name: Node ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: npm ci and npm run build
+      - name: npm install and npm run build
         run: |
-          npm ci
-          npm run build:ci
+          npm i
+          npm run build
+      - name: Push Build to Releases
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "release.tar.gz,foo/*.txt"
+          bodyFile: "body.md"
+            token: ${{ secrets.RQTH_THINKING_TOKEN }}
